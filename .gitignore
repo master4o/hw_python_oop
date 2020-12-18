@@ -14,3 +14,9 @@ __pycache__/
 
 *.sublime-project
 *.sublime-workspace
+
+README.md
+requirements
+pytest
+__pycache__
+tests/
