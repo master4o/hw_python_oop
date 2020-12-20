@@ -25,19 +25,21 @@ class Calculator:
 
     def get_today_stats(self):
         today = dt.datetime.today().date()
-        today_amount = 0
+        today_amount = []
         for i in range(0, len(self.records)):
             if self.records[i].date == today:
-                today_amount += self.records[i].amount
+                today_amount.append(self.records[i].amount)
+        today_amount = sum(x for x in today_amount)
         return today_amount
 
     def get_week_stats(self):
-        today = dt.datetime.now().date()
+        today = dt.datetime.today().date()
         last_week_day = today - dt.timedelta(days=7)
-        week_amount = 0
+        week_amount = []
         for i in range(0, len(self.records)):
-            if last_week_day <= self.records[i].date <= today:
-                week_amount += self.records[i].amount
+            if last_week_day < self.records[i].date <= today:
+                week_amount.append(self.records[i].amount)
+        week_amount = sum(x for x in week_amount)
         return week_amount
 
 
@@ -70,4 +72,4 @@ class CaloriesCalculator(Calculator):
             return (f'Сегодня можно съесть что-нибудь ещё, '
                     f'но с общей калорийностью не более {today_calories_balance} кКал')
         return f'Хватит есть!'
-
+    
