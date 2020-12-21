@@ -25,21 +25,13 @@ class Calculator:
 
     def get_today_stats(self):
         today = dt.datetime.today().date()
-        today_amount = []
-        for rec in self.records:
-            if rec.date == today:
-                today_amount.append(rec.amount)
-        today_amount = sum(x for x in today_amount)
+        today_amount = sum([rec.amount for rec in self.records if rec.date == today])
         return today_amount
 
     def get_week_stats(self):
         today = dt.datetime.today().date()
         last_week_day = today - dt.timedelta(days=7)
-        week_amount = []
-        for rec in self.records:
-            if last_week_day < rec.date <= today:
-                week_amount.append(rec.amount)
-        week_amount = sum(x for x in week_amount)
+        week_amount = sum([rec.amount for rec in self.records if last_week_day < rec.date <= today])
         return week_amount
 
 
@@ -55,12 +47,11 @@ class CashCalculator(Calculator):
         today_cash_remained = self.limit - self.get_today_stats()
         rate = self.rates[currency][0]
         currency_name = self.rates[currency][1]
+        currency_convert = round(today_cash_remained / rate, 2)
         if today_cash_remained > 0:
-            currency_convert = round(today_cash_remained / rate, 2)
             return f'На сегодня осталось {currency_convert} {currency_name}'
         elif today_cash_remained < 0:
-            currency_convert = abs(round(today_cash_remained / rate, 2))
-            return f'Денег нет, держись: твой долг - {currency_convert} {currency_name}'
+            return f'Денег нет, держись: твой долг - {abs(currency_convert)} {currency_name}'
         return f'Денег нет, держись'
 
 
@@ -72,3 +63,4 @@ class CaloriesCalculator(Calculator):
             return (f'Сегодня можно съесть что-нибудь ещё, '
                     f'но с общей калорийностью не более {today_calories_balance} кКал')
         return f'Хватит есть!'
+    
